@@ -24,7 +24,9 @@ class _ListKontakPageState extends State<ListKontakPage> {
           title: const Center(
         child: Text("Kontak App"),
       )),
-      body: ListView.builder(itemBuilder: (context, index) {
+      body: ListView.builder(
+        itemCount: listKontak.length,
+        itemBuilder: (context, index) {
         Kontak kontak = listKontak[index];
         return Padding(
           padding: const EdgeInsets.only(top: 20),
@@ -66,11 +68,11 @@ class _ListKontakPageState extends State<ListKontakPage> {
                         AlertDialog hapus = AlertDialog(
                           title: const Text("Information"),
                           content: Container(
-                            height: 100,
+                            height: 80,
                             child: Column(
                               children: [
                                 Text(
-                                    "Yakin ingin menghapus daya ${kontak.name}"),
+                                    "Yakin ingin menghapus data ${kontak.name}"),
                               ],
                             ),
                           ),
@@ -111,9 +113,9 @@ class _ListKontakPageState extends State<ListKontakPage> {
     var list = await db.getAllKontak();
     setState(() {
       listKontak.clear();
-      for (var kontak in list!) {
-        listKontak.add(kontak.fromMap(kontak));
-      }
+      list!.forEach((kontak) {
+        listKontak.add(Kontak.fromMap(kontak));
+      });
     });
   }
 
@@ -122,8 +124,7 @@ class _ListKontakPageState extends State<ListKontakPage> {
         context, MaterialPageRoute(builder: (context) => FormKontak()));
     if (result == 'save') {
       await _getAllKontak();
-    }
-    ;
+    };
   }
 
   Future<void> _deleteKontak(Kontak kontak, int position) async {
